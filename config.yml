@@ -1,0 +1,50 @@
+
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        APP_NAME: $APP_NAME
+    #command: tail -f /dev/null
+    restart: 'always'
+    ports:
+      - $APP_PORT_REPLACE: $APP_PORT
+    volumes:
+      - ./data/$APP_NAME_REPLACE: /app/$APP_NAME
+    networks:
+        containerhost_nt:
+            ipv4_address: 173.16.250.2
+    #deploy:
+      #resources:
+        #limits:
+          #cpus: '10000'
+          #memory: 2000M
+        #reservations:
+          #cpus: '0.0001'
+          #memory: 1000M
+  #phpmyadmin:
+    #image: phpmyadmin/phpmyadmin
+    #container_name: 'phpmyadmin'
+    #depends_on:
+      #- mysql
+    #environment:
+      #PMA_HOST: mysql
+      #PMA_PORT: 3308
+    #ports:
+      #- '8080:80'
+    #volumes:
+      #- /sessions
+      
+volumes:
+    data:
+        driver: local
+      
+networks:
+    containerhost_nt:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+            - subnet: 173.16.250.0/24
